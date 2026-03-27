@@ -79,22 +79,17 @@ async def main():
         minute=0,
         kwargs={'bot': bot}
     )
-    scheduler.add_job(
-        get_giveaway_result,
-        trigger='cron',
-        day_of_week='fri',
-        hour=12,
-        minute=16,
-        kwargs={'bot': bot}
-    )
     # scheduler.add_job(
     #     get_giveaway_result,
     #     trigger='cron',
     #     day_of_week='fri',
-    #     hour=11,
-    #     minute=53,
+    #     hour=12,
+    #     minute=16,
     #     kwargs={'bot': bot}
     # )
+
+    scheduler.add_job(get_giveaway_result, 'interval', seconds=10, kwargs={'bot': bot})
+
     scheduler.start()
 
     await bot.delete_webhook(drop_pending_updates=True)
