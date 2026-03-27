@@ -83,8 +83,8 @@ async def main():
         get_giveaway_result,
         trigger='cron',
         day_of_week='fri',
-        hour=15,
-        minute=5,
+        hour=12,
+        minute=16,
         kwargs={'bot': bot}
     )
     # scheduler.add_job(
