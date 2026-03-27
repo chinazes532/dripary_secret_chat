@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from aiogram import F, Router, Bot
 from aiogram.types import Message, CallbackQuery
@@ -62,7 +62,7 @@ async def complete_task(callback: CallbackQuery, state: FSMContext):
             )
 
             await update_user_game_points(callback.from_user.id, task.points_count)
-            current_date = datetime.datetime.now().strftime("%d.%m.%Y")
+            current_date = datetime.now()
             await set_user_task(tg_id, task.id, current_date)
 
         else:

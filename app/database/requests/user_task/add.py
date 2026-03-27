@@ -1,8 +1,10 @@
 from app.database.models import async_session
 from app.database.models import UserTask
 
+from datetime import datetime
 
-async def set_user_task(tg_id: int, task_id: int, date: str):
+
+async def set_user_task(tg_id: int, task_id: int, date: datetime):
     async with async_session() as session:
         session.add(UserTask(tg_id=tg_id,
                              task_id=task_id,

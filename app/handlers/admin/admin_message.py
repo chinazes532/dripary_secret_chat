@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from aiogram import F, Router, Bot
 from aiogram.types import Message, CallbackQuery
@@ -149,7 +149,7 @@ async def accept_task(callback: CallbackQuery, bot: Bot):
         await callback.message.answer("<b>Пользователь уже выполнил данное задание!</b>")
         return
 
-    current_date = datetime.datetime.now().strftime("%d.%m.%Y")
+    current_date = datetime.now()
     await set_user_task(tg_id, task_id, current_date)
 
     await callback.message.answer("<b>Вы успешно приняли задание!</b>")

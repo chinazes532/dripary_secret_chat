@@ -28,10 +28,12 @@ async def get_random_top_user_this_week(top_limit: int = 5):
     async with async_session() as session:
         now = datetime.now()
 
-        # начало недели (понедельник)
-        start_of_week = now - timedelta(days=now.weekday())
+        # начало недели (понедельник 00:00:00)
+        start_of_week = (now - timedelta(days=now.weekday())).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
 
-        # конец недели
+        # конец недели (следующий понедельник)
         end_of_week = start_of_week + timedelta(days=7)
 
         result = await session.execute(
@@ -42,12 +44,8 @@ async def get_random_top_user_this_week(top_limit: int = 5):
             )
             .join(UserTask, UserTask.tg_id == User.tg_id)
             .join(Task, Task.id == UserTask.task_id)
-            .where(
-                func.to_date(UserTask.date, 'DD.MM.YYYY') >= start_of_week
-            )
-            .where(
-                func.to_date(UserTask.date, 'DD.MM.YYYY') < end_of_week
-            )
+            .where(UserTask.date >= start_of_week)
+            .where(UserTask.date < end_of_week)
             .group_by(User.tg_id, User.first_name)
             .order_by(func.sum(Task.points_count).desc())
             .limit(top_limit)
@@ -58,8 +56,8 @@ async def get_random_top_user_this_week(top_limit: int = 5):
         if not top_users:
             return None
 
-        # случайный победитель из топа
         return random.choice(top_users)
+
 
 async def get_top_users(period: str = "all", limit: int = 10):
     async with async_session() as session:
@@ -75,15 +73,15 @@ async def get_top_users(period: str = "all", limit: int = 10):
             .join(Task, Task.id == UserTask.task_id)
         )
 
-        # 📅 фильтрация
         if period == "day":
-            start = now.strftime("%Y-%m-%d")
+            start = now.replace(hour=0, minute=0, second=0, microsecond=0)
             query = query.where(UserTask.date >= start)
 
         elif period == "week":
-            start_of_week = now - timedelta(days=now.weekday())
-            start = start_of_week.strftime("%Y-%m-%d")
-            query = query.where(UserTask.date >= start)
+            start_of_week = (now - timedelta(days=now.weekday())).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+            query = query.where(UserTask.date >= start_of_week)
 
         elif period == "all":
             pass

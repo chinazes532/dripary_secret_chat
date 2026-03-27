@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import Annotated
 
-from sqlalchemy import ForeignKey, String, BigInteger
+from sqlalchemy import ForeignKey, String, BigInteger, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 
@@ -79,7 +80,7 @@ class UserTask(Base):
     id: Mapped[intpk]
     tg_id: Mapped[int] = mapped_column(BigInteger)
     task_id: Mapped[int]
-    date: Mapped[str]
+    date: Mapped[datetime] = mapped_column(DateTime)
 
 
 class Giveaway(Base):
