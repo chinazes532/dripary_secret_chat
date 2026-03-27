@@ -34,8 +34,8 @@ async def get_giveaway_result(bot: Bot):
         f"<b>{giveaway.title}</b>\n"
         f"{giveaway.description}\n\n"
         f"🏆 <b>Победитель:</b>\n"
-        f"👤 {name}\n"
-        f"💎 Баллы: {points}\n\n"
+        f"👤 {name}\n\n"
+        # f"💎 Баллы: {points}\n\n"
         f"Поздравляем! 🎊"
     )
 
